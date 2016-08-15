@@ -1,24 +1,24 @@
 /// <reference path="/lib/hexi.js" />
 
 var rowCnt = 10;
-    colCnt = 20;
-    boxH = 60;
-    boxW = 60;
+    colCnt = 30;
+    boxH = 50;
+    boxW = 50;
 
-    // w - wall     g - grass     s - stone     r - water   f - floor  b - box
+    // w - wall     g - grass     s - stone     r - water    f - floor    b - box
 
     var map =
- "wwwwwwwwww" + "wwwwwwwwww" +
- "wfffffffff" + "fffffffffw" +
- "wfbbbbbbff" + "fffffffffw" +
- "ffbfffffff" + "fffffffffw" +
- "wfbfbbbfff" + "fffffffffw" +
+ "wwwwwwwwww" + "wwwwwwwwww" + "wwwwwwwwww" +
+ "wfffffffff" + "ffffffffff" + "ffbfffffff" +
+ "wfbbbbbbff" + "fffffffffw" + "ffbfbbbffw" +
+ "ffbfffffff" + "fffffffffw" + "fffffffffw" +
+ "wfbfbbbfff" + "fffffffffw" + "fffffffffw" +
 
- "wfffffffff" + "fffffffffw" +
- "wfffffffff" + "fffffffffw" +
- "wfffffffff" + "fffffffffw" +
- "wfffffffff" + "fffffffffw" +
- "wwwwwwwwww" + "wwwwwwwwww";
+ "wfffffffff" + "ffffffbffw" + "fffffffffw" +
+ "wfffffffff" + "fffffgbffw" + "fffffffffw" +
+ "wfffffffff" + "fffbbbbffw" + "fffffffffw" +
+ "wfffffffff" + "fffffffffw" + "fffffffffw" +
+ "wwwwwwwwww" + "wwwwwwwwww" + "wwwwwwwwww";
 
   
 //An array that contains all the files you want to load
@@ -32,11 +32,11 @@ var thingsToLoad = [
   "../sprites/water/surface.png",
   "../sprites/floor/floor.jpg",
   "../sprites/walls/red_brick.jpg",
- 
+  "../sprites/snowflake.png"
 ];
 
 //Create a new Hexi instance, and start it
-var g = hexi(1300, 600, setup, thingsToLoad);
+var g = hexi(1400, 500, setup, thingsToLoad);
 
 //Set the background color and scale the canvas
 g.backgroundColor = "black";
@@ -52,6 +52,7 @@ var terrain;
 var camera;
 
 var borders = [];
+var particles = [];
 
 function initTerrain() {
     var terrain = g.group();
@@ -117,9 +118,9 @@ function initTerrain() {
     mark.x = terrain.halfWidth - mark.halfWidth;
     mark.y = terrain.halfHeight - mark.halfHeight;
     
-    mark.visible = false;
+    //mark.visible = false;
     g.move(mark);
-
+    
     return terrain;
 }
 
@@ -130,13 +131,35 @@ function setup() {
     hero = initHero();
     terrain.addChild(hero);
 
-    camera = g.worldCamera(g.stage, g.renderer.view.width, g.renderer.view.width.height, g.renderer.view);
+    camera = g.worldCamera(terrain, g.renderer.view.width, g.renderer.view.width.height, g.renderer.view);
     //camera = g.worldCamera(g.stage, g.stage.width, g.stage.height, g.renderer.view);
 
-    var anim = initAnimDust();
-    terrain.addChild(anim);
+    /*var anim = initAnimDust();
+    terrain.addChild(anim);*/
+    
 
     g.state = play;
+}
+
+function addParticles()
+{
+      particles = particles.concat(g.createParticles(                 //The function
+      300,                       //x position
+      300,    //y position
+      () => g.sprite("../sprites/snowflake.png"),        //Particle sprite
+      terrain,                           //The container to add the particles to               
+      30,                                 //Number of particles
+      0,                                 //Gravity
+      true,                              //Random spacing
+      0, 6.28,                          //Min/max angle
+      12, 30,                            //Min/max size
+      1, 3,                              //Min/max speed
+      0, 0.000001,                       //Min/max scale speed
+      0, 0,                       //Min/max alpha speed
+      0.5, 0.9                          //Min/max rotation speed
+    )); 
+
+    particles.forEach(p => {p.fps = 5;});
 }
 
 function initAnimDust()
@@ -206,7 +229,7 @@ function initHero()
    hero.x = boxW * 0;
    hero.y = boxH * 3;
 
-   hero.velocity = 7;
+   hero.velocity = 10;
 
    hero.fps = 5;
 
@@ -219,13 +242,16 @@ function initHero()
 
 function play() {
     //camera.centerOver(mark);
-    camera.follow(hero);
+    camera.centerOver(hero);
 
-    //particles.forEach(p => {g.contain(p, {x: 0, y: 0, width: g.canvas.width, height: g.canvas.height}, true);});
-    //particles.forEach(p => {g.contain(p, {x: 0, y: 0, width: 60, height: 500}, true);});
+    
+    particles.forEach(p => {g.hit(p, borders, true, true, true);});
 
     g.arrowControl(hero, hero.velocity);
     g.hit(hero, borders, true, false, false);
+    g.hit(hero, mark, true, true, false, () => {addParticles();})
+    
+    
     g.move(hero);
 
     hero.checkDir();
@@ -236,8 +262,6 @@ function play() {
     hero.prevX = hero.x;
     hero.prevY = hero.y;
 }
-
-
 
 
 
