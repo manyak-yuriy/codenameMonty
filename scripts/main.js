@@ -5,14 +5,14 @@ var rowCnt = 10;
     boxH = 60;
     boxW = 60;
 
-    // w - wall     g - grass     s - stone     r - water   f - floor
+    // w - wall     g - grass     s - stone     r - water   f - floor  b - box
 
     var map =
  "wwwwwwwwww" + "wwwwwwwwww" +
  "wfffffffff" + "fffffffffw" +
- "wfffffffff" + "fffffffffw" +
- "ffffffffff" + "fffffffffw" +
- "wfffffffff" + "fffffffffw" +
+ "wfbbbbbbff" + "fffffffffw" +
+ "ffbfffffff" + "fffffffffw" +
+ "wfbfbbbfff" + "fffffffffw" +
 
  "wfffffffff" + "fffffffffw" +
  "wfffffffff" + "fffffffffw" +
@@ -23,7 +23,7 @@ var rowCnt = 10;
   
 //An array that contains all the files you want to load
 var thingsToLoad = [
-  "../sprites/ghosts/ghost.png",
+  "../sprites/heroes/ghost.png",
   "../sprites/bubble.png",
   "../sprites/walls/dark_bricks.jpg",
   "../sprites/walls/box.png",
@@ -31,16 +31,17 @@ var thingsToLoad = [
   "../sprites/grass/grass.jpg",
   "../sprites/water/surface.png",
   "../sprites/floor/floor.jpg",
-  "../sprites/walls/red_brick.jpg"
+  "../sprites/walls/red_brick.jpg",
+ 
 ];
 
 //Create a new Hexi instance, and start it
-var g = hexi(colCnt * boxW + 100, rowCnt * boxH + 100, setup, thingsToLoad);
+var g = hexi(1300, 600, setup, thingsToLoad);
 
 //Set the background color and scale the canvas
 g.backgroundColor = "black";
-//g.scaleToWindow();
-g.fps = 35;
+g.scaleToWindow();
+g.fps = 25;
 
 //Start Hexi
 g.start();
@@ -50,14 +51,16 @@ var particles;
 var terrain;
 var camera;
 
+var borders = [];
+
 function initTerrain() {
     var terrain = g.group();
-    terrain.x = 100;
-    terrain.y = 10;
+    g.stage.addChild(terrain);
+    terrain.x = 0;
+    terrain.y = 0;
+    
     g.move(terrain);
     var box;
-
-     
 
     for (var i = 0; i < rowCnt; i++)
        for (var j = 0; j < colCnt; j++)
@@ -65,11 +68,12 @@ function initTerrain() {
            switch (map.charAt(i * colCnt + j))
            {
                case 'w':
-                    {
-                        //box = g.sprite("../sprites/walls/dark_bricks.jpg");
-                        box = g.sprite("../sprites/walls/red_brick.jpg");
-                        break;
-                    }
+                   {
+                       box = g.sprite("../sprites/walls/dark_bricks.jpg");
+                       //box = g.sprite("../sprites/walls/red_brick.jpg");
+                       borders.push(box);
+                       break;
+                   }
                 case 'g':
                     {
                         box = g.sprite("../sprites/grass/grass.jpg");
@@ -90,6 +94,12 @@ function initTerrain() {
                         box = g.sprite("../sprites/floor/floor.jpg");
                         break;
                     }
+                case 'b':
+                    {
+                        box = g.sprite("../sprites/walls/box.png");
+                        borders.push(box);
+                        break;
+                    }
            }
            box.width = boxW;
            box.height = boxH;
@@ -100,11 +110,14 @@ function initTerrain() {
 
     mark = g.sprite("../sprites/walls/red_brick.jpg");
     terrain.addChild(mark);
-    mark.x = 600;
-    mark.y = 250;
+
     mark.width = boxW;
     mark.height = boxH;
-    mark.alpha = 1;
+
+    mark.x = terrain.halfWidth - mark.halfWidth;
+    mark.y = terrain.halfHeight - mark.halfHeight;
+    
+    mark.visible = false;
     g.move(mark);
 
     return terrain;
@@ -117,8 +130,8 @@ function setup() {
     hero = initHero();
     terrain.addChild(hero);
 
-    //camera = g.worldCamera(terrain, g.canvas.width, g.canvas.height, g.renderer.view);
-    camera = g.worldCamera(terrain, terrain.width, terrain.height, g.renderer.view);
+    camera = g.worldCamera(g.stage, g.renderer.view.width, g.renderer.view.width.height, g.renderer.view);
+    //camera = g.worldCamera(g.stage, g.stage.width, g.stage.height, g.renderer.view);
 
     var anim = initAnimDust();
     terrain.addChild(anim);
@@ -133,7 +146,7 @@ function initAnimDust()
     
     anim.x = 100;
     anim.y = 100;
-    anim.fps = 20;
+    anim.fps = 10;
 
     anim.width = 200;
     anim.height = 200;
@@ -146,8 +159,9 @@ function initAnimDust()
 
 function initHero()
 {
-   ghosts = g.filmstrip("../sprites/ghosts/ghost.png", 32, 48);
+   ghosts = g.filmstrip("../sprites/heroes/ghost.png", 32, 48);
    hero = g.sprite(ghosts);
+   hero.circular = true;
 
    hero.dirFrames = 
    {
@@ -158,51 +172,66 @@ function initHero()
    }
 
    hero.checkDir = function () {
-       var dir;
-       if (Math.abs(this.x) > Math.abs(this.y)) {
+       var dir = this.dir;
+
+       if (Math.abs(this.vx) > Math.abs(this.vy)) {
            if (this.x > this.prevX)
                dir = "right";
-           else
+           else if (this.x < this.prevX)
                dir = "left";
        }
        else {
            if (this.y > this.prevY)
                dir = "down";
-           else
+           else if (this.y < this.prevY)
                dir = "up";
        }
 
-       if (this.x == this.prevX && this.y == this.prevY)
-           dir = "down";
+       //console.log(dir);
 
-       if (dir != hero.dir) {
-           hero.dir = dir;
-           hero.stopAnimation();
-           hero.playAnimation(hero.dirFrames[dir]);
+       // set default direction to down
+       /*if (this.x == this.prevX && this.y == this.prevY)
+           dir = "down";*/
+
+       if (dir != this.dir) {
+           this.dir = dir;
+           this.stopAnimation();
+           this.playAnimation(this.dirFrames[hero.dir]);
        }
    } 
    
    hero.width = boxW;
    hero.height = boxH;
-   hero.x = 200;
-   hero.y = 200;
 
-   hero.fps = 10;
-   hero.dir = "up";
+   hero.x = boxW * 0;
+   hero.y = boxH * 3;
+
+   hero.velocity = 7;
+
+   hero.fps = 5;
+
+   hero.dir = "down";
    hero.playAnimation(hero.dirFrames[hero.dir]);
 
    return hero;
 }
 
+
 function play() {
-    hero.checkDir();
+    //camera.centerOver(mark);
+    camera.follow(hero);
 
     //particles.forEach(p => {g.contain(p, {x: 0, y: 0, width: g.canvas.width, height: g.canvas.height}, true);});
     //particles.forEach(p => {g.contain(p, {x: 0, y: 0, width: 60, height: 500}, true);});
-    g.arrowControl(hero, 4);
+
+    g.arrowControl(hero, hero.velocity);
+    g.hit(hero, borders, true, false, false);
     g.move(hero);
-    g.move(terrain);
-    camera.follow(hero);
+
+    hero.checkDir();
+
+    //terrain.x -= 1;
+    //g.move(terrain);
     
     hero.prevX = hero.x;
     hero.prevY = hero.y;
