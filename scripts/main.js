@@ -1,31 +1,24 @@
 /// <reference path="/lib/hexi.js" />
 
-var rowCnt = 15;
-    colCnt = 30;
-    boxH = 50;
-    boxW = 50;
+var rowCnt = 10;
+    colCnt = 20;
+    boxH = 60;
+    boxW = 60;
 
     // w - wall     g - grass     s - stone     r - water   f - floor
 
     var map =
- "wwwwwwwwww" + "wwwwwwwwww" + "wwwwwwwwww" +
- "wggggggggg" + "gggggggggg" + "gggggggggw" +
- "wggggggggg" + "ggffffgggg" + "gggggggggw" +
- "wwwwwwwwww" + "wwffffwwww" + "wwwwwwwwww" +
- "wwwwwwwwww" + "wwffffwwww" + "wwwwwwwwww" +
+ "wwwwwwwwww" + "wwwwwwwwww" +
+ "wfffffffff" + "fffffffffw" +
+ "wfffffffff" + "fffffffffw" +
+ "ffffffffff" + "fffffffffw" +
+ "wfffffffff" + "fffffffffw" +
 
- "wwwwwwwwww" + "wwwwwwwwww" + "wwwwwwwwww" +
- "wwwwwwwwww" + "wwwwwwwwww" + "wwwwwwwwww" +
- "wwwwwwwwww" + "wwwwwwwwww" + "wwwwwwwwww" +
- "wwwwwwwwww" + "wwwwwwwwww" + "wwwwwwwwww" +
- "wwwwwwwwww" + "wwwwwwwwww" + "wwwwwwwwww" +
-
- "wwwwwwwwww" + "wwwwwwwwww" + "wwwwwwwwww" +
- "wwwwwwwwww" + "wwwwwwwwww" + "wwwwwwwwww" +
- "wwwwwwwwww" + "wwwwwwwwww" + "wwwwwwwwww" +
- "wwwwwwwwww" + "wwwwwwwwww" + "wwwwwwwwww" +
- "wwwwwwwwww" + "wwwwwwwwww" + "wwwwwwwwww";
-
+ "wfffffffff" + "fffffffffw" +
+ "wfffffffff" + "fffffffffw" +
+ "wfffffffff" + "fffffffffw" +
+ "wfffffffff" + "fffffffffw" +
+ "wwwwwwwwww" + "wwwwwwwwww";
 
   
 //An array that contains all the files you want to load
@@ -37,16 +30,17 @@ var thingsToLoad = [
   "../sprites/grass/stoneFloor.jpg",
   "../sprites/grass/grass.jpg",
   "../sprites/water/surface.png",
-  "../sprites/floor/floor.png"
+  "../sprites/floor/floor.jpg",
+  "../sprites/walls/red_brick.jpg"
 ];
 
 //Create a new Hexi instance, and start it
-var g = hexi(colCnt * boxW, rowCnt * boxH, setup, thingsToLoad);
+var g = hexi(colCnt * boxW + 100, rowCnt * boxH + 100, setup, thingsToLoad);
 
 //Set the background color and scale the canvas
-//g.backgroundColor = "black";
+g.backgroundColor = "black";
 //g.scaleToWindow();
-g.fps = 60;
+g.fps = 35;
 
 //Start Hexi
 g.start();
@@ -54,10 +48,16 @@ g.start();
 var hero, anim;
 var particles;
 var terrain;
+var camera;
 
 function initTerrain() {
     var terrain = g.group();
+    terrain.x = 100;
+    terrain.y = 10;
+    g.move(terrain);
     var box;
+
+     
 
     for (var i = 0; i < rowCnt; i++)
        for (var j = 0; j < colCnt; j++)
@@ -66,7 +66,8 @@ function initTerrain() {
            {
                case 'w':
                     {
-                        box = g.sprite("../sprites/walls/stone1.jpg");
+                        //box = g.sprite("../sprites/walls/dark_bricks.jpg");
+                        box = g.sprite("../sprites/walls/red_brick.jpg");
                         break;
                     }
                 case 'g':
@@ -97,6 +98,15 @@ function initTerrain() {
            terrain.addChild(box);
        }
 
+    mark = g.sprite("../sprites/walls/red_brick.jpg");
+    terrain.addChild(mark);
+    mark.x = 600;
+    mark.y = 250;
+    mark.width = boxW;
+    mark.height = boxH;
+    mark.alpha = 1;
+    g.move(mark);
+
     return terrain;
 }
 
@@ -104,55 +114,14 @@ function setup() {
     //ghosts = g.frames("../sprites/ghosts/ghost.png", [[0, 0],[32, 0]], 32, 48);
 
     terrain = initTerrain();
-
     hero = initHero();
-    
+    terrain.addChild(hero);
 
-    
-    /*
-    var allDust = g.filmstrip("../sprites/bubble.png", 192, 192);
-    allDust = [allDust[14], allDust[15]];
-
-    particles = g.createParticles(                 //The function
-      100,                       //x position
-      100,    //y position
-      () => g.sprite(allDust),        //Particle sprite
-      g.stage,                           //The container to add the particles to               
-      900,                                 //Number of particles
-      0,                                 //Gravity
-      true,                              //Random spacing
-      0, 6.28,                          //Min/max angle
-      12, 18,                            //Min/max size
-      1, 2,                              //Min/max speed
-      0, 0,                       //Min/max scale speed
-      0, 0,                       //Min/max alpha speed
-      0.05, 0.1                          //Min/max rotation speed
-    ); */
-
-
-    //alert(particles);
-
-    var waypoints = 
-       [
-         [100, 100],
-         [10, 10],
-         [200, 5],
-         [500, 70],
-         [40, 300],
-         [50, 20]
-       ];
- 
-       g.walkPath(
-             hero,       //The sprite
-             waypoints,       //The array of waypoints
-             1000,             //Total duration, in frames
-             "smoothstep",    //Easing type
-             false,            //Should the path loop?
-             false,            //Should the path reverse?
-             200            //Delay in milliseconds between segments
-        );
+    //camera = g.worldCamera(terrain, g.canvas.width, g.canvas.height, g.renderer.view);
+    camera = g.worldCamera(terrain, terrain.width, terrain.height, g.renderer.view);
 
     var anim = initAnimDust();
+    terrain.addChild(anim);
 
     g.state = play;
 }
@@ -211,11 +180,13 @@ function initHero()
            hero.stopAnimation();
            hero.playAnimation(hero.dirFrames[dir]);
        }
-
    } 
-
+   
    hero.width = boxW;
    hero.height = boxH;
+   hero.x = 200;
+   hero.y = 200;
+
    hero.fps = 10;
    hero.dir = "up";
    hero.playAnimation(hero.dirFrames[hero.dir]);
@@ -228,8 +199,60 @@ function play() {
 
     //particles.forEach(p => {g.contain(p, {x: 0, y: 0, width: g.canvas.width, height: g.canvas.height}, true);});
     //particles.forEach(p => {g.contain(p, {x: 0, y: 0, width: 60, height: 500}, true);});
-
+    g.arrowControl(hero, 4);
     g.move(hero);
+    g.move(terrain);
+    camera.follow(hero);
+    
     hero.prevX = hero.x;
     hero.prevY = hero.y;
 }
+
+
+
+
+
+
+ /*
+    var allDust = g.filmstrip("../sprites/bubble.png", 192, 192);
+    allDust = [allDust[14], allDust[15]];
+
+    particles = g.createParticles(                 //The function
+      100,                       //x position
+      100,    //y position
+      () => g.sprite(allDust),        //Particle sprite
+      g.stage,                           //The container to add the particles to               
+      900,                                 //Number of particles
+      0,                                 //Gravity
+      true,                              //Random spacing
+      0, 6.28,                          //Min/max angle
+      12, 18,                            //Min/max size
+      1, 2,                              //Min/max speed
+      0, 0,                       //Min/max scale speed
+      0, 0,                       //Min/max alpha speed
+      0.05, 0.1                          //Min/max rotation speed
+    ); */
+
+
+    //alert(particles);
+
+    /*
+    var waypoints = 
+       [
+         [100, 100],
+         [1200, 200],
+         [1300, 505],
+         [500, 90],
+         [240, 300],
+         [150, 420]
+       ];
+ 
+       g.walkPath(
+             hero,       //The sprite
+             waypoints,       //The array of waypoints
+             1000,             //Total duration, in frames
+             "smoothstep",    //Easing type
+             false,            //Should the path loop?
+             false,            //Should the path reverse?
+             200            //Delay in milliseconds between segments
+        ); */
