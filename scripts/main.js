@@ -41,7 +41,7 @@ var g = hexi(1400, 500, setup, thingsToLoad);
 //Set the background color and scale the canvas
 g.backgroundColor = "black";
 g.scaleToWindow();
-g.fps = 25;
+g.fps = 10;
 
 //Start Hexi
 g.start();
@@ -132,10 +132,12 @@ function setup() {
     terrain.addChild(hero);
 
     camera = g.worldCamera(terrain, g.renderer.view.width, g.renderer.view.width.height, g.renderer.view);
+    
     //camera = g.worldCamera(g.stage, g.stage.width, g.stage.height, g.renderer.view);
 
     /*var anim = initAnimDust();
     terrain.addChild(anim);*/
+    
     
 
     g.state = play;
@@ -143,20 +145,26 @@ function setup() {
 
 function addParticles()
 {
+    var starContainer = new PIXI.ParticleContainer(
+      15000,
+      {alpha: true, scale: true, rotation: true, uvs: true}
+    );
+    terrain.addChild(starContainer);
+
       particles = particles.concat(g.createParticles(                 //The function
       300,                       //x position
       300,    //y position
       () => g.sprite("../sprites/snowflake.png"),        //Particle sprite
-      terrain,                           //The container to add the particles to               
-      30,                                 //Number of particles
+      starContainer,                           //The container to add the particles to               
+      300,                                 //Number of particles
       0,                                 //Gravity
       true,                              //Random spacing
       0, 6.28,                          //Min/max angle
-      12, 30,                            //Min/max size
+      5, 20,                            //Min/max size
       1, 3,                              //Min/max speed
       0, 0.000001,                       //Min/max scale speed
       0, 0,                       //Min/max alpha speed
-      0.5, 0.9                          //Min/max rotation speed
+      0, 0                          //Min/max rotation speed
     )); 
 
     particles.forEach(p => {p.fps = 5;});
