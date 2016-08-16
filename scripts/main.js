@@ -90,6 +90,7 @@ function initTerrain() {
                case 'c':
                    {
                        box = g.sprite("../sprites/walls/stone1.jpg");
+                       box.role = "border";
                        //box = g.sprite("../sprites/walls/red_brick.jpg");
                        borders.push(box);
                        break;
@@ -97,6 +98,7 @@ function initTerrain() {
                case 'w':
                    {
                        box = g.sprite("../sprites/walls/dark_bricks.jpg");
+                       box.role = "border";
                        //box = g.sprite("../sprites/walls/red_brick.jpg");
                        borders.push(box);
                        break;
@@ -104,21 +106,25 @@ function initTerrain() {
                 case 'g':
                     {
                         box = g.sprite("../sprites/grass/grass.jpg");
+                        box.role = "back";
                         break;
                     }
                 case 's':
                     {
                         box = g.sprite("../sprites/grass/stoneFloor.jpg");
+                        box.role = "back";
                         break;
                     }
                 case 'r':
                     {
                         box = g.sprite("../sprites/water/surface.png");
+                        box.role = "back";
                         break;
                     }
                 case 'f':
                     {
                         box = g.sprite("../sprites/floor/floor.jpg");
+                        box.role = "back";
                         break;
                     }
            }
@@ -170,7 +176,7 @@ function addObjects(terrain)
                         boxes.push(box);
                         //box.circular = true;
 
-
+                        box.role = "border";
 
                         box.width = boxW;
                         box.height = boxH;
@@ -341,7 +347,12 @@ function play() {
     // check if particle bumps upon border
     particles.forEach(p => 
     {
-        g.hit(p, borders, true, true, true, () => {});
+        g.hit(p, borders, true, true, true, 
+          () => 
+          {
+              g.remove(p);
+              //delete p; 
+          });
 
     }); 
     // ---
@@ -352,31 +363,33 @@ function play() {
        (side, box) => 
        {
            //alert(side);
+           var initV = 2;
+
            if (right.isDown && side == "leftMiddle") 
            {
-               box.vx = 3;
-               box.ax = 0.2;
+               box.vx += initV;
+               box.ax = 0.9;
                box.ax_dir = -1;
            }
 
            if (left.isDown && side == "rightMiddle") 
            {
-               box.vx = -3;
-               box.ax = 0.2;
+               box.vx += -initV;
+               box.ax = 0.9;
                box.ax_dir = 1;
            }
 
            if (down.isDown && side == "topMiddle") 
            {
-               box.vy = 3;
-               box.ay = 0.2;
+               box.vy += initV;
+               box.ay = 0.9;
                box.ay_dir = -1;
            }
 
            if (up.isDown && side == "bottomMiddle") 
            {
-               box.vy = -3;
-               box.ay = 0.2;
+               box.vy += -initV;
+               box.ay = 0.9;
                box.ay_dir = 1;
            }
                
@@ -389,12 +402,20 @@ function play() {
         b.x += b.vx;
         b.vx += b.ax * b.ax_dir;
         if (b.vx * b.ax_dir > 0)
-           b.ax = 0;
+        {
+            b.vx = 0;
+            b.ax = 0;
+        }
+          
 
         b.y += b.vy;
         b.vy += b.ay * b.ay_dir;
         if (b.vy * b.ay_dir > 0)
-           b.ay = 0;
+        {
+            b.vy = 0;
+            b.ay = 0;
+        }
+           
 
         //console.log("v="+b.vx + " a="+b.ax);
 
