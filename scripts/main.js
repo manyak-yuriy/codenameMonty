@@ -1,77 +1,6 @@
 /// <reference path="/lib/hexi.js" />
 
-var rowCnt = 10;
-    colCnt = 30;
-    boxH = 50;
-    boxW = 50;
 
-    // w - wall     g - grass     s - stone    f - floor      c - concrete wall
-
-    var map =
- "wwwwwwwwww" + "wwwwwwwwww" + "wwwwwwwwww" +
- "wfffffffff" + "ffffffffff" + "ffffffffff" +
- "wfffffffff" + "fffffffffc" + "fffffffffw" +
- "ffffffffff" + "fffffffffc" + "fffffffffw" +
- "wfffffffff" + "fffffffffc" + "fffffffffw" +
-
- "wfffffffff" + "ffgggffffc" + "fffffffffw" +
- "wfffffffff" + "ffggggfgfc" + "fffffffffw" +
- "wfggggggff" + "ffgffffgfc" + "fffffffffw" +
- "wfggggggff" + "ffggggggfc" + "fffffffffw" +
- "wwwwwwwwww" + "wwwwwwwwww" + "wwwwwwwwww";
-
-    //  b - box   r - water
-
-    var map_obj =
- "oooooooooo" + "oooooooooo" + "oooooooooo" + 
- "ooobbboooo" + "oooooooooo" + "oooooooooo" + 
- "oooboooooo" + "oooooooooo" + "oooooooooo" + 
- "oooboooboo" + "oooooooooo" + "oooooooooo" + 
- "oooooooooo" + "oooooooooo" + "oooooooooo" + 
-
- "oooooooooo" + "oooooooooo" + "oooooooooo" + 
- "oooooooooo" + "oooooooooo" + "oooooooooo" + 
- "oooooooooo" + "oooooooooo" + "oooooooooo" + 
- "oooooooooo" + "oooooooooo" + "oooooooooo" + 
- "oooooooooo" + "oooooooooo" + "oooooooooo";
-
-  
-//An array that contains all the files you want to load
-var thingsToLoad = [
-  "../sprites/heroes/ghost.png",
-  "../sprites/bubble.png",
-  "../sprites/walls/dark_bricks.jpg",
-  "../sprites/walls/box.png",
-  "../sprites/grass/stoneFloor.jpg",
-  "../sprites/grass/grass.jpg",
-  "../sprites/water/surface.png",
-  "../sprites/floor/floor.jpg",
-  "../sprites/walls/red_brick.jpg",
-  "../sprites/snowflake.png",
-  "../sprites/col-bubble.png",
-  "../sprites/bubble-death.png"
-];
-
-//Create a new Hexi instance, and start it
-var g = hexi(1400, 500, setup, thingsToLoad);
-
-//Set the background color and scale the canvas
-g.backgroundColor = "black";
-g.scaleToWindow();
-g.fps = 10;
-
-
-//Start Hexi
-g.start();
-
-var hero, anim;
-var particles;
-var terrain;
-var camera;
-
-var borders = [];
-var particles = [];
-var boxes = [];
 
 function initTerrain() {
     var terrain = g.group();
@@ -195,7 +124,6 @@ function addObjects(terrain)
 
                         terrain.addChild(box);
 
-
                         break;
                     }
 
@@ -203,25 +131,7 @@ function addObjects(terrain)
         }
 }
 
-function setup() {
-    //ghosts = g.frames("../sprites/ghosts/ghost.png", [[0, 0],[32, 0]], 32, 48);
 
-    terrain = initTerrain();
-    obj = addObjects(terrain);
-
-    hero = initHero();
-    terrain.addChild(hero);
-
-    camera = g.worldCamera(terrain, g.renderer.view.width, g.renderer.view.width.height, g.renderer.view);
-    
-    //camera = g.worldCamera(g.stage, g.stage.width, g.stage.height, g.renderer.view);
-    var customKey = g.keyboard(32);
-    customKey.press = () => {
-        alert("lol");
-    };
-
-    g.state = play;
-}
 
 function addParticles()
 {
@@ -230,7 +140,7 @@ function addParticles()
     
     terrain.addChild(anim);*/
 
-    var starContainer = new PIXI.ParticleContainer(
+    starContainer = new PIXI.ParticleContainer(
       15000,
       {alpha: true, scale: true, rotation: true, uvs: true}
     );
@@ -245,14 +155,14 @@ function addParticles()
       0,                                 //Gravity
       true,                              //Random spacing
       0, 6.28,                          //Min/max angle
-      10, 25,                            //Min/max size
-      1, 2,                              //Min/max speed
-      0, 0,                       //Min/max scale speed
+      5, 15,                            //Min/max size
+      1, 3,                              //Min/max speed
+      0, 1,                       //Min/max scale speed
       0, 0,                       //Min/max alpha speed
       0, 0                          //Min/max rotation speed
     )); 
 
-    particles.forEach(p => {p.fps = 5;});
+    particles.forEach(p => {p.fps = 3;});
     //g.wait(5000, ()=>{particles.forEach(p => {g.remove(p); p = undefined;})});
 }
 
@@ -327,172 +237,3 @@ function initHero()
 
    return hero;
 }
-
-
-
-
-// initialize tink lib for keyboard event handling
-var t = new Tink(PIXI, g.renderer.view);
-
-var   left = t.keyboard(37),
-      up = t.keyboard(38),
-      right = t.keyboard(39),
-      down = t.keyboard(40);
-// ---
-
-
-function play() { 
-    camera.centerOver(hero);
-
-    // check if particle bumps upon border
-    particles.forEach(p => 
-    {
-        g.hit(p, borders, true, true, true, 
-          () => 
-          {
-              g.remove(p);
-              //delete p; 
-          });
-
-    }); 
-    // ---
-    
-
-    // try moving boxes
-    g.hit(hero, boxes, true, false, false, 
-       (side, box) => 
-       {
-           //alert(side);
-           var initV = 2;
-
-           if (right.isDown && side == "leftMiddle") 
-           {
-               box.vx += initV;
-               box.ax = 0.9;
-               box.ax_dir = -1;
-           }
-
-           if (left.isDown && side == "rightMiddle") 
-           {
-               box.vx += -initV;
-               box.ax = 0.9;
-               box.ax_dir = 1;
-           }
-
-           if (down.isDown && side == "topMiddle") 
-           {
-               box.vy += initV;
-               box.ay = 0.9;
-               box.ay_dir = -1;
-           }
-
-           if (up.isDown && side == "bottomMiddle") 
-           {
-               box.vy += -initV;
-               box.ay = 0.9;
-               box.ay_dir = 1;
-           }
-               
-       });
-    // ---
-
-    // check if box is bumping into border
-    boxes.forEach(b => 
-    {
-        b.x += b.vx;
-        b.vx += b.ax * b.ax_dir;
-        if (b.vx * b.ax_dir > 0)
-        {
-            b.vx = 0;
-            b.ax = 0;
-        }
-          
-
-        b.y += b.vy;
-        b.vy += b.ay * b.ay_dir;
-        if (b.vy * b.ay_dir > 0)
-        {
-            b.vy = 0;
-            b.ay = 0;
-        }
-           
-
-        //console.log("v="+b.vx + " a="+b.ax);
-
-        borders.forEach(bb => 
-        {
-            if (b != bb)
-               g.hit(b, bb, true, false, true, () => {})
-        });
-    }); 
-    // ---
-
-    // check if hero is not bumping upon border
-    g.hit(hero, borders, true, false, false);
-
-    // check if hero is stumbling upon the mark
-    g.hit(hero, mark, true, true, false, 
-       () => 
-       {
-           addParticles(); 
-           var anim = initAnimDust(); 
-           mark.visible = false;
-       })
-    // ---
-    
-    g.arrowControl(hero, 10);
-    g.move(hero);
-
-    hero.checkDir();
-
-    //terrain.x -= 1;
-    //g.move(terrain);
-    
-    hero.prevX = hero.x;
-    hero.prevY = hero.y;
-}
-
-
- /*
-    var allDust = g.filmstrip("../sprites/bubble.png", 192, 192);
-    allDust = [allDust[14], allDust[15]];
-
-    particles = g.createParticles(                 //The function
-      100,                       //x position
-      100,    //y position
-      () => g.sprite(allDust),        //Particle sprite
-      g.stage,                           //The container to add the particles to               
-      900,                                 //Number of particles
-      0,                                 //Gravity
-      true,                              //Random spacing
-      0, 6.28,                          //Min/max angle
-      12, 18,                            //Min/max size
-      1, 2,                              //Min/max speed
-      0, 0,                       //Min/max scale speed
-      0, 0,                       //Min/max alpha speed
-      0.05, 0.1                          //Min/max rotation speed
-    ); */
-
-
-    //alert(particles);
-
-    /*
-    var waypoints = 
-       [
-         [100, 100],
-         [1200, 200],
-         [1300, 505],
-         [500, 90],
-         [240, 300],
-         [150, 420]
-       ];
- 
-       g.walkPath(
-             hero,       //The sprite
-             waypoints,       //The array of waypoints
-             1000,             //Total duration, in frames
-             "smoothstep",    //Easing type
-             false,            //Should the path loop?
-             false,            //Should the path reverse?
-             200            //Delay in milliseconds between segments
-        ); */
