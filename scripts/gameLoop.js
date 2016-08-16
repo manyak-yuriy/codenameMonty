@@ -14,12 +14,12 @@ function play() {
 
         for (ii = i - 1; ii <= i + 1; ii++)
         for (jj = j - 1; jj <= j + 1; jj++)
-        if (borGrid[ii][jj].indexOf(b) == -1)
-           borGrid[ii][jj].push(b); 
+            if (borGrid[ii][jj].indexOf(b) == -1)
+                borGrid[ii][jj].push(b); 
     });
 
     // check if particle bumps upon border
-    //console.log(particles);
+    /*
     particles.filter(p => 
     {
         
@@ -35,7 +35,7 @@ function play() {
                
           });
           return alive;
-    }); 
+    }); */
     // ---
     
     
