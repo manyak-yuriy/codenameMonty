@@ -185,6 +185,7 @@ function addObjects(terrain)
                         box.ay = 0;
 
                         box.ax_dir = 0;
+                        box.ay_dir = 0;
 
                         terrain.addChild(box);
 
@@ -212,7 +213,7 @@ function setup() {
     customKey.press = () => {
         alert("lol");
     };
-    
+
     g.state = play;
 }
 
@@ -300,12 +301,6 @@ function initHero()
                dir = "up";
        }
 
-       //console.log(dir);
-
-       // set default direction to down
-       /*if (this.x == this.prevX && this.y == this.prevY)
-           dir = "down";*/
-
        if (dir != this.dir) {
            this.dir = dir;
            this.stopAnimation();
@@ -319,8 +314,6 @@ function initHero()
    hero.x = boxW * 0;
    hero.y = boxH * 3;
 
-   hero.velocity = 10;
-
    hero.fps = 15;
 
    hero.dir = "down";
@@ -329,52 +322,68 @@ function initHero()
    return hero;
 }
 
-var num = 0;
 
 
+
+// initialize tink lib for keyboard event handling
 var t = new Tink(PIXI, g.renderer.view);
-
 
 var   left = t.keyboard(37),
       up = t.keyboard(38),
       right = t.keyboard(39),
       down = t.keyboard(40);
+// ---
 
-pointer = t.makePointer();
 
-pointer.press = () => console.log("The pointer was pressed");
-pointer.release = () => console.log("The pointer was released");
-pointer.tap = () => console.log("The pointer was tapped");
-
-function play() {
-    //camera.centerOver(mark);
-    num++;
+function play() { 
     camera.centerOver(hero);
 
     // check if particle bumps upon border
     particles.forEach(p => 
     {
-        g.hit(p, borders, true, true, true);
+        g.hit(p, borders, true, true, true, () => {});
+
     }); 
+    // ---
     
-    g.arrowControl(hero, hero.velocity);
 
     // try moving boxes
     g.hit(hero, boxes, true, false, false, 
        (side, box) => 
        {
-           if (right.isDown) 
+           //alert(side);
+           if (right.isDown && side == "leftMiddle") 
            {
-               terrain.removeChild(box);
-               terrain.addChild(box);
                box.vx = 3;
                box.ax = 0.2;
                box.ax_dir = -1;
            }
+
+           if (left.isDown && side == "rightMiddle") 
+           {
+               box.vx = -3;
+               box.ax = 0.2;
+               box.ax_dir = 1;
+           }
+
+           if (down.isDown && side == "topMiddle") 
+           {
+               box.vy = 3;
+               box.ay = 0.2;
+               box.ay_dir = -1;
+           }
+
+           if (up.isDown && side == "bottomMiddle") 
+           {
+               box.vy = -3;
+               box.ay = 0.2;
+               box.ay_dir = 1;
+           }
                
        });
+    // ---
 
-    // check if box is not bumping upon border
+    // check if box is bumping into border
     boxes.forEach(b => 
     {
         b.x += b.vx;
@@ -382,7 +391,12 @@ function play() {
         if (b.vx * b.ax_dir > 0)
            b.ax = 0;
 
-        console.log("v="+b.vx + " a="+b.ax);
+        b.y += b.vy;
+        b.vy += b.ay * b.ay_dir;
+        if (b.vy * b.ay_dir > 0)
+           b.ay = 0;
+
+        //console.log("v="+b.vx + " a="+b.ax);
 
         borders.forEach(bb => 
         {
@@ -390,6 +404,7 @@ function play() {
                g.hit(b, bb, true, false, true, () => {})
         });
     }); 
+    // ---
 
     // check if hero is not bumping upon border
     g.hit(hero, borders, true, false, false);
@@ -402,8 +417,9 @@ function play() {
            var anim = initAnimDust(); 
            mark.visible = false;
        })
+    // ---
     
-    
+    g.arrowControl(hero, 10);
     g.move(hero);
 
     hero.checkDir();
