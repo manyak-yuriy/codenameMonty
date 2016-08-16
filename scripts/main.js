@@ -10,14 +10,14 @@ var rowCnt = 10;
     var map =
  "wwwwwwwwww" + "wwwwwwwwww" + "wwwwwwwwww" +
  "wfffffffff" + "ffffffffff" + "ffbfffffff" +
- "wfbbbbbbff" + "fffffffffw" + "ffbfbbbffw" +
- "ffbfffffff" + "fffffffffw" + "fffffffffw" +
- "wfbfbbbfff" + "fffffffffw" + "fffffffffw" +
+ "wfbbbbbbff" + "ffbfbffffc" + "ffbfbbbffw" +
+ "ffbfffffff" + "fffffffffc" + "fffffffffw" +
+ "wfbfbbbfff" + "ffbffffffc" + "fffffffffw" +
 
- "wfffffffff" + "ffffffbffw" + "fffffffffw" +
- "wfffffffff" + "fffffgbffw" + "fffffffffw" +
- "wfffffffff" + "fffbbbbffw" + "fffffffffw" +
- "wfffffffff" + "fffffffffw" + "fffffffffw" +
+ "wfffffffff" + "ffgggfbffc" + "fffffffffw" +
+ "wfffffffff" + "ffggggbgfc" + "fffffffffw" +
+ "wfggggggff" + "ffgbbbbgfc" + "fffffffffw" +
+ "wfggggggff" + "ffggggggfc" + "fffffffffw" +
  "wwwwwwwwww" + "wwwwwwwwww" + "wwwwwwwwww";
 
   
@@ -32,7 +32,9 @@ var thingsToLoad = [
   "../sprites/water/surface.png",
   "../sprites/floor/floor.jpg",
   "../sprites/walls/red_brick.jpg",
-  "../sprites/snowflake.png"
+  "../sprites/snowflake.png",
+  "../sprites/col-bubble.png",
+  "../sprites/bubble-death.png"
 ];
 
 //Create a new Hexi instance, and start it
@@ -42,6 +44,7 @@ var g = hexi(1400, 500, setup, thingsToLoad);
 g.backgroundColor = "black";
 g.scaleToWindow();
 g.fps = 10;
+
 
 //Start Hexi
 g.start();
@@ -53,6 +56,7 @@ var camera;
 
 var borders = [];
 var particles = [];
+var boxes = [];
 
 function initTerrain() {
     var terrain = g.group();
@@ -68,6 +72,13 @@ function initTerrain() {
        {
            switch (map.charAt(i * colCnt + j))
            {
+               case 'c':
+                   {
+                       box = g.sprite("../sprites/walls/stone1.jpg");
+                       //box = g.sprite("../sprites/walls/red_brick.jpg");
+                       borders.push(box);
+                       break;
+                   }
                case 'w':
                    {
                        box = g.sprite("../sprites/walls/dark_bricks.jpg");
@@ -99,13 +110,26 @@ function initTerrain() {
                     {
                         box = g.sprite("../sprites/walls/box.png");
                         borders.push(box);
+                        boxes.push(box);
+                        //box.circular = true;
                         break;
                     }
            }
+
            box.width = boxW;
            box.height = boxH;
+   
            box.x = boxW * j;
            box.y = boxH * i;
+
+           box.vx = 0;
+           box.vy = 0;
+
+           box.ax = 0;
+           box.ay = 0;
+
+           box.ax_dir = 0;
+
            terrain.addChild(box);
        }
 
@@ -115,8 +139,8 @@ function initTerrain() {
     mark.width = boxW;
     mark.height = boxH;
 
-    mark.x = terrain.halfWidth - mark.halfWidth;
-    mark.y = terrain.halfHeight - mark.halfHeight;
+    mark.x = 300;
+    mark.y = 300;
     
     //mark.visible = false;
     g.move(mark);
@@ -134,17 +158,21 @@ function setup() {
     camera = g.worldCamera(terrain, g.renderer.view.width, g.renderer.view.width.height, g.renderer.view);
     
     //camera = g.worldCamera(g.stage, g.stage.width, g.stage.height, g.renderer.view);
-
-    /*var anim = initAnimDust();
-    terrain.addChild(anim);*/
+    var customKey = g.keyboard(32);
+    customKey.press = () => {
+        alert("lol");
+    };
     
-    
-
     g.state = play;
 }
 
 function addParticles()
 {
+    /*var allStates = g.filmstrip("../sprites/bubble-death.png", 192, 192);
+    var anim = g.sprite(allStates);
+    
+    terrain.addChild(anim);*/
+
     var starContainer = new PIXI.ParticleContainer(
       15000,
       {alpha: true, scale: true, rotation: true, uvs: true}
@@ -154,35 +182,39 @@ function addParticles()
       particles = particles.concat(g.createParticles(                 //The function
       300,                       //x position
       300,    //y position
-      () => g.sprite("../sprites/snowflake.png"),        //Particle sprite
+      () => g.sprite("../sprites/col-bubble.png"),        //Particle sprite
       starContainer,                           //The container to add the particles to               
-      300,                                 //Number of particles
+      10,                                 //Number of particles
       0,                                 //Gravity
       true,                              //Random spacing
       0, 6.28,                          //Min/max angle
-      5, 20,                            //Min/max size
-      1, 3,                              //Min/max speed
-      0, 0.000001,                       //Min/max scale speed
+      10, 25,                            //Min/max size
+      1, 2,                              //Min/max speed
+      0, 0,                       //Min/max scale speed
       0, 0,                       //Min/max alpha speed
       0, 0                          //Min/max rotation speed
     )); 
 
     particles.forEach(p => {p.fps = 5;});
+    //g.wait(5000, ()=>{particles.forEach(p => {g.remove(p); p = undefined;})});
 }
 
 function initAnimDust()
 {
     var allDust = g.filmstrip("../sprites/bubble.png", 192, 192);
+    allDust.reverse;
     var anim = g.sprite(allDust);
     
-    anim.x = 100;
-    anim.y = 100;
+    terrain.addChild(anim);
+    anim.x = 230;
+    anim.y = 230;
     anim.fps = 10;
 
     anim.width = 200;
     anim.height = 200;
 
     anim.playAnimation();
+    
     //anim.visible = false;
     
     return anim;
@@ -239,7 +271,7 @@ function initHero()
 
    hero.velocity = 10;
 
-   hero.fps = 5;
+   hero.fps = 15;
 
    hero.dir = "down";
    hero.playAnimation(hero.dirFrames[hero.dir]);
@@ -247,17 +279,79 @@ function initHero()
    return hero;
 }
 
+var num = 0;
+
+
+var t = new Tink(PIXI, g.renderer.view);
+
+
+var   left = t.keyboard(37),
+      up = t.keyboard(38),
+      right = t.keyboard(39),
+      down = t.keyboard(40);
+
+pointer = t.makePointer();
+
+pointer.press = () => console.log("The pointer was pressed");
+pointer.release = () => console.log("The pointer was released");
+pointer.tap = () => console.log("The pointer was tapped");
 
 function play() {
     //camera.centerOver(mark);
+    num++;
     camera.centerOver(hero);
 
+    // check if particle bumps upon border
+    particles.forEach(p => 
+    {
+        g.hit(p, borders, true, true, true);
+    }); 
     
-    particles.forEach(p => {g.hit(p, borders, true, true, true);});
-
     g.arrowControl(hero, hero.velocity);
+
+    // try moving boxes
+    g.hit(hero, boxes, true, false, false, 
+       (side, box) => 
+       {
+           if (right.isDown) 
+           {
+               terrain.removeChild(box);
+               terrain.addChild(box);
+               box.vx = 3;
+               box.ax = 0.2;
+               box.ax_dir = -1;
+           }
+               
+       });
+
+    // check if box is not bumping upon border
+    boxes.forEach(b => 
+    {
+        b.x += b.vx;
+        b.vx += b.ax * b.ax_dir;
+        if (b.vx * b.ax_dir > 0)
+           b.ax = 0;
+
+        console.log("v="+b.vx + " a="+b.ax);
+
+        borders.forEach(bb => 
+        {
+            if (b != bb)
+               g.hit(b, bb, true, false, true, () => {})
+        });
+    }); 
+
+    // check if hero is not bumping upon border
     g.hit(hero, borders, true, false, false);
-    g.hit(hero, mark, true, true, false, () => {addParticles();})
+
+    // check if hero is stumbling upon the mark
+    g.hit(hero, mark, true, true, false, 
+       () => 
+       {
+           addParticles(); 
+           var anim = initAnimDust(); 
+           mark.visible = false;
+       })
     
     
     g.move(hero);
