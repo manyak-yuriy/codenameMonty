@@ -52,9 +52,9 @@ var
  "oooooooooo" + "oooboboooo" + "oobbbbbbbo" + 
  
  "oooooooooo" + "oooboboooo" + "oooooooooo" + 
- "oooooooooo" + "oooboooooo" + "oooooooooo" + 
- "oooooooooo" + "bbbboooooo" + "oooooooooo" + 
- "oooooooooo" + "ooooooobbo" + "oooooooooo" + 
+ "oooooooooo" + "oooboooooo" + "obbbbbbbbo" + 
+ "oooooooooo" + "bbbboooooo" + "bbbbbbbbbo" + 
+ "oooooooooo" + "ooooooobbo" + "bbbbbbbbbo" + 
  "oooooooooo" + "oooooooooo" + "oooooooooo";
 
   
@@ -73,7 +73,8 @@ var
   "../sprites/walls/red_brick.jpg",
   "../sprites/snowflake.png",
   "../sprites/col-bubble.png",
-  "../sprites/bubble-death.png"
+  "../sprites/bubble-death.png",
+  "../sprites/heroes/butterfly.png"
 ];
 
 
@@ -85,7 +86,7 @@ var
 //Set the background color and scale the canvas
     g.backgroundColor = "black";
     g.scaleToWindow();
-    g.fps = 30;
+    g.fps = 35;
 
 //Start Hexi
     g.start();
@@ -115,6 +116,32 @@ function setup() {
     obj = addObjects(terrain);
     hero = initHero();
     terrain.addChild(hero);
+
+    butterfly = initButterfly();
+    terrain.addChild(butterfly);
+    /*
+    var r = g.randomInt(10, 100);
+    var waypoints = 
+       [
+         [100 + r, 100 - r],
+         [500 + r, -10],
+         [1200 - 2 * r, 200 - 3 * r],
+         [1300 - 3 * r, 505 + 2 * r],
+         [500 - r, 90 + r],
+         [240 - r, 300 + r],
+         [150 + 4 * r, 420 - r],
+         [100 + r, 100 - r]
+       ];
+ 
+       g.walkPath(
+             butterfly,       //The sprite
+             waypoints,       //The array of waypoints
+             1000,             //Total duration, in frames
+             "smoothstep",    //Easing type
+             true,            //Should the path loop?
+             false,            //Should the path reverse?
+             200            //Delay in milliseconds between segments
+        ); */
 
     camera = g.worldCamera(terrain, g.renderer.view.width, g.renderer.view.width.height, g.renderer.view);
 

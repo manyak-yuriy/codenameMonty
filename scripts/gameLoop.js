@@ -1,15 +1,22 @@
 var 
     frameN = 0,
     skipEvery = 1;
+    clearOnceEvery = 1000;
+
+    var gu = new GameUtilities();
 
 function play() {
     frameN++;
 
-    clearGrid(borGrid);
+    gu.followEase(butterfly, hero, 0.003);
+
+    if (frameN % clearOnceEvery == 0)
+        clearGrid(borGrid);
      
     camera.centerOver(hero);
+    
     if (frameN % skipEvery == 0)
-    borders.forEach(b => 
+        borders.forEach(b => 
     {
         var j = Math.floor(b.x / boxW);
         var i = Math.floor(b.y / boxH);
@@ -132,7 +139,7 @@ function play() {
        })
     // ---
     
-    g.arrowControl(hero, 3);
+    g.arrowControl(hero, 10);
     g.move(hero);
 
     hero.checkDir();
@@ -142,4 +149,6 @@ function play() {
     
     hero.prevX = hero.x;
     hero.prevY = hero.y;
+
+    
 }

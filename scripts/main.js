@@ -190,10 +190,30 @@ function initAnimDust()
     return anim;
 }
 
+function initButterfly()
+{
+   var frames = g.filmstrip("../sprites/heroes/butterfly.png", 70, 65);
+   var hero = g.sprite(frames);
+   hero.circular = true;
+
+   hero.width = boxW * 1.3;
+   hero.height = boxH * 1.3;
+
+   hero.x = boxW * 30;
+   hero.y = boxH * 3;
+
+   hero.fps = 25;
+
+   //hero.dir = "down";
+   hero.playAnimation();
+
+   return hero;
+}
+
 function initHero()
 {
-   ghosts = g.filmstrip("../sprites/heroes/ghost.png", 32, 48);
-   hero = g.sprite(ghosts);
+   var ghosts = g.filmstrip("../sprites/heroes/ghost.png", 32, 48);
+   var hero = g.sprite(ghosts);
    hero.circular = true;
 
    hero.dirFrames = 
