@@ -85,7 +85,7 @@ var
 //Set the background color and scale the canvas
     g.backgroundColor = "black";
     g.scaleToWindow();
-    g.fps = 25;
+    g.fps = 45;
 
 //Start Hexi
     g.start();

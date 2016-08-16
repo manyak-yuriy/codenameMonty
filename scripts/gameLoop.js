@@ -1,11 +1,12 @@
 var 
-    frameN = 0;
+    frameN = 0,
+    skipEvery = 2;
 
 function play() {
     frameN++;
      
     camera.centerOver(hero);
-    if (frameN % 2 == 0)
+    if (frameN % skipEvery == 0)
     borders.forEach(b => 
     {
         var j = Math.floor(b.x / boxW);
