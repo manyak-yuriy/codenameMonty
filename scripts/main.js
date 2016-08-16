@@ -5,20 +5,35 @@ var rowCnt = 10;
     boxH = 50;
     boxW = 50;
 
-    // w - wall     g - grass     s - stone     r - water    f - floor    b - box
+    // w - wall     g - grass     s - stone    f - floor      c - concrete wall
 
     var map =
  "wwwwwwwwww" + "wwwwwwwwww" + "wwwwwwwwww" +
- "wfffffffff" + "ffffffffff" + "ffbfffffff" +
- "wfbbbbbbff" + "ffbfbffffc" + "ffbfbbbffw" +
- "ffbfffffff" + "fffffffffc" + "fffffffffw" +
- "wfbfbbbfff" + "ffbffffffc" + "fffffffffw" +
+ "wfffffffff" + "ffffffffff" + "ffffffffff" +
+ "wfffffffff" + "fffffffffc" + "fffffffffw" +
+ "ffffffffff" + "fffffffffc" + "fffffffffw" +
+ "wfffffffff" + "fffffffffc" + "fffffffffw" +
 
- "wfffffffff" + "ffgggfbffc" + "fffffffffw" +
- "wfffffffff" + "ffggggbgfc" + "fffffffffw" +
- "wfggggggff" + "ffgbbbbgfc" + "fffffffffw" +
+ "wfffffffff" + "ffgggffffc" + "fffffffffw" +
+ "wfffffffff" + "ffggggfgfc" + "fffffffffw" +
+ "wfggggggff" + "ffgffffgfc" + "fffffffffw" +
  "wfggggggff" + "ffggggggfc" + "fffffffffw" +
  "wwwwwwwwww" + "wwwwwwwwww" + "wwwwwwwwww";
+
+    //  b - box   r - water
+
+    var map_obj =
+ "oooooooooo" + "oooooooooo" + "oooooooooo" + 
+ "ooobbboooo" + "oooooooooo" + "oooooooooo" + 
+ "oooboooooo" + "oooooooooo" + "oooooooooo" + 
+ "oooboooboo" + "oooooooooo" + "oooooooooo" + 
+ "oooooooooo" + "oooooooooo" + "oooooooooo" + 
+
+ "oooooooooo" + "oooooooooo" + "oooooooooo" + 
+ "oooooooooo" + "oooooooooo" + "oooooooooo" + 
+ "oooooooooo" + "oooooooooo" + "oooooooooo" + 
+ "oooooooooo" + "oooooooooo" + "oooooooooo" + 
+ "oooooooooo" + "oooooooooo" + "oooooooooo";
 
   
 //An array that contains all the files you want to load
@@ -106,14 +121,6 @@ function initTerrain() {
                         box = g.sprite("../sprites/floor/floor.jpg");
                         break;
                     }
-                case 'b':
-                    {
-                        box = g.sprite("../sprites/walls/box.png");
-                        borders.push(box);
-                        boxes.push(box);
-                        //box.circular = true;
-                        break;
-                    }
            }
 
            box.width = boxW;
@@ -122,13 +129,13 @@ function initTerrain() {
            box.x = boxW * j;
            box.y = boxH * i;
 
-           box.vx = 0;
-           box.vy = 0;
+           //box.vx = 0;
+           //box.vy = 0;
 
-           box.ax = 0;
-           box.ay = 0;
+           //box.ax = 0;
+           //box.ay = 0;
 
-           box.ax_dir = 0;
+           //box.ax_dir = 0;
 
            terrain.addChild(box);
        }
@@ -142,16 +149,59 @@ function initTerrain() {
     mark.x = 300;
     mark.y = 300;
     
-    //mark.visible = false;
+    mark.visible = false;
     g.move(mark);
     
     return terrain;
+}
+
+function addObjects(terrain)
+{
+    var box;
+    for (var i = 0; i < rowCnt; i++)
+       for (var j = 0; j < colCnt; j++)
+       {
+           switch (map_obj.charAt(i * colCnt + j))
+           {
+                    case 'b':
+                    {
+                        box = g.sprite("../sprites/walls/box.png");
+                        borders.push(box);
+                        boxes.push(box);
+                        //box.circular = true;
+
+
+
+                        box.width = boxW;
+                        box.height = boxH;
+   
+                        box.x = boxW * j;
+                        box.y = boxH * i;
+
+                        box.vx = 0;
+                        box.vy = 0;
+
+                        box.ax = 0;
+                        box.ay = 0;
+
+                        box.ax_dir = 0;
+
+                        terrain.addChild(box);
+
+
+                        break;
+                    }
+
+           }
+        }
 }
 
 function setup() {
     //ghosts = g.frames("../sprites/ghosts/ghost.png", [[0, 0],[32, 0]], 32, 48);
 
     terrain = initTerrain();
+    obj = addObjects(terrain);
+
     hero = initHero();
     terrain.addChild(hero);
 
@@ -364,8 +414,6 @@ function play() {
     hero.prevX = hero.x;
     hero.prevY = hero.y;
 }
-
-
 
 
  /*
