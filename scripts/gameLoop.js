@@ -1,25 +1,46 @@
+var 
+    frameN = 0;
 
-
-function play() { 
+function play() {
+    frameN++;
+     
     camera.centerOver(hero);
+    if (frameN % 2 == 0)
+    borders.forEach(b => 
+    {
+        var j = Math.floor(b.x / boxW);
+        var i = Math.floor(b.y / boxH);
+
+        for (ii = i - 1; ii <= i + 1; ii++)
+        for (jj = j - 1; jj <= j + 1; jj++)
+        if (borGrid[ii][jj].indexOf(b) == -1)
+           borGrid[ii][jj].push(b); 
+    });
 
     // check if particle bumps upon border
-    particles.forEach(p => 
+    //console.log(particles);
+    particles.filter(p => 
     {
+        
+        var alive = true;
         g.hit(p, borders, true, true, true, 
           () => 
           {   if (p)
               {
+                  //particles[particles.indexOf(p)] = undefined;
                   g.remove(p);
+                  alive = false;
               }
                
           });
-
+          return alive;
     }); 
     // ---
     
-
+    
+    
     // try moving boxes
+    
     g.hit(hero, boxes, true, false, false, 
        (side, box) => 
        {
@@ -58,6 +79,9 @@ function play() {
     // ---
 
     // check if box is bumping into border
+    
+    
+
     boxes.forEach(b => 
     {
         b.x += b.vx;
@@ -78,9 +102,13 @@ function play() {
         }
            
 
-        //console.log("v="+b.vx + " a="+b.ax);
+        var box_j = Math.floor(b.x / boxW);
+        var box_i = Math.floor(b.y / boxH);
+        var arrAdj = borGrid[box_i][box_j]
 
-        borders.forEach(bb => 
+        //console.log("v="+b.vx + " a="+b.ax);
+        if (arrAdj.length > 0)
+        arrAdj.forEach(bb => 
         {
             if (b != bb)
                g.hit(b, bb, true, false, true, () => {})

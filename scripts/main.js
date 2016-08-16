@@ -122,6 +122,9 @@ function addObjects(terrain)
                         box.ax_dir = 0;
                         box.ay_dir = 0;
 
+                        //box.setPivot(0.5, 0.5);
+                        //box.rotation += (Math.PI) * g.randomInt(0, 10);
+
                         terrain.addChild(box);
 
                         break;

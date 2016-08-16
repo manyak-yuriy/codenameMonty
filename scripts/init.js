@@ -46,15 +46,15 @@ var
 var 
     map_obj =
  "oooooooooo" + "oooooooooo" + "oooooooooo" + 
- "ooobbboooo" + "oooooooooo" + "oooooooooo" + 
+ "ooobbboooo" + "oobboooobo" + "oooooooooo" + 
  "oooboooooo" + "oooooooooo" + "oooooooooo" + 
- "oooboooboo" + "oooooooooo" + "oooooooooo" + 
- "oooooooooo" + "oooooooooo" + "oooooooooo" + 
-
- "oooooooooo" + "oooooooooo" + "oooooooooo" + 
- "oooooooooo" + "oooooooooo" + "oooooooooo" + 
- "oooooooooo" + "oooooooooo" + "oooooooooo" + 
- "oooooooooo" + "oooooooooo" + "oooooooooo" + 
+ "oooboooboo" + "oobbobbbbo" + "oobbbbbboo" + 
+ "oooooooooo" + "oooboboooo" + "oobbbbbbbo" + 
+ 
+ "oooooooooo" + "oooboboooo" + "oooooooooo" + 
+ "oooooooooo" + "oooboooooo" + "oooooooooo" + 
+ "oooooooooo" + "bbbboooooo" + "oooooooooo" + 
+ "oooooooooo" + "ooooooobbo" + "oooooooooo" + 
  "oooooooooo" + "oooooooooo" + "oooooooooo";
 
   
@@ -78,7 +78,6 @@ var
 
 
 
-
 //Create a new Hexi instance, and start it
 var 
     g = hexi(1400, 500, setup, thingsToLoad);
@@ -86,7 +85,7 @@ var
 //Set the background color and scale the canvas
     g.backgroundColor = "black";
     g.scaleToWindow();
-    g.fps = 10;
+    g.fps = 25;
 
 //Start Hexi
     g.start();
@@ -120,4 +119,14 @@ function setup() {
     camera = g.worldCamera(terrain, g.renderer.view.width, g.renderer.view.width.height, g.renderer.view);
 
     g.state = play;
+}
+
+var 
+    borGrid = [];
+
+for (i = -1; i < rowCnt+1; i++)
+{
+    borGrid[i] = [];
+    for (j = -1; j < colCnt+1; j++)
+        borGrid[i][j] = [];
 }
