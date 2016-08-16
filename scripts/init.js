@@ -85,7 +85,7 @@ var
 //Set the background color and scale the canvas
     g.backgroundColor = "black";
     g.scaleToWindow();
-    g.fps = 105;
+    g.fps = 30;
 
 //Start Hexi
     g.start();
@@ -128,6 +128,7 @@ clearGrid(borGrid);
 
 function clearGrid(grid)
 {
+    //grid = [];
     for (i = -1; i <= rowCnt+1; i++)
     {
         grid[i] = [];

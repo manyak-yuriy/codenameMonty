@@ -1,9 +1,11 @@
 var 
     frameN = 0,
-    skipEvery = 2;
+    skipEvery = 1;
 
 function play() {
     frameN++;
+
+    clearGrid(borGrid);
      
     camera.centerOver(hero);
     if (frameN % skipEvery == 0)
@@ -50,28 +52,28 @@ function play() {
 
            if (right.isDown && side == "leftMiddle") 
            {
-               box.vx += initV;
+               box.vx = initV;
                box.ax = 0.9;
                box.ax_dir = -1;
            }
 
            if (left.isDown && side == "rightMiddle") 
            {
-               box.vx += -initV;
+               box.vx = -initV;
                box.ax = 0.9;
                box.ax_dir = 1;
            }
 
            if (down.isDown && side == "topMiddle") 
            {
-               box.vy += initV;
+               box.vy = initV;
                box.ay = 0.9;
                box.ay_dir = -1;
            }
 
            if (up.isDown && side == "bottomMiddle") 
            {
-               box.vy += -initV;
+               box.vy = -initV;
                box.ay = 0.9;
                box.ay_dir = 1;
            }
@@ -130,7 +132,7 @@ function play() {
        })
     // ---
     
-    g.arrowControl(hero, 10);
+    g.arrowControl(hero, 3);
     g.move(hero);
 
     hero.checkDir();
