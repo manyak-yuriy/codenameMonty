@@ -74,7 +74,8 @@ var
   "../sprites/snowflake.png",
   "../sprites/col-bubble.png",
   "../sprites/bubble-death.png",
-  "../sprites/heroes/butterfly.png"
+  "../sprites/heroes/butterfly.png",
+  "../sprites/weaponry/fire_particles.png"
 ];
 
 
@@ -86,7 +87,7 @@ var
 //Set the background color and scale the canvas
     g.backgroundColor = "black";
     g.scaleToWindow();
-    g.fps = 35;
+    g.fps = 25;
 
 //Start Hexi
     g.start();
@@ -144,6 +145,8 @@ function setup() {
         ); */
 
     camera = g.worldCamera(terrain, g.renderer.view.width, g.renderer.view.width.height, g.renderer.view);
+
+    addExplosion();
 
     g.state = play;
 }
