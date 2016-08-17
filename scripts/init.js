@@ -46,15 +46,15 @@ var
 var 
     map_obj =
  "oooooooooo" + "oooooooooo" + "oooooooooo" + 
- "ooobbboooo" + "oobboooobo" + "oooooooooo" + 
- "oooboooooo" + "oooooooooo" + "oooooooooo" + 
+ "oooooooooo" + "oobboooobo" + "oooooooooo" + 
+ "ooobbboooo" + "oooooooooo" + "oooooooooo" + 
  "oooboooboo" + "oobbobbbbo" + "oobbbbbboo" + 
  "oooooooooo" + "oooboboooo" + "oobbbbbbbo" + 
  
- "oooooooooo" + "oooboboooo" + "oooooooooo" + 
- "oooooooooo" + "oooboooooo" + "obbbbbbbbo" + 
- "oooooooooo" + "bbbboooooo" + "bbbbbbbbbo" + 
- "oooooooooo" + "ooooooobbo" + "bbbbbbbbbo" + 
+ "oobboooobo" + "oooboboooo" + "oooooooooo" + 
+ "oooooboboo" + "oooboooooo" + "obbbbbbbbo" + 
+ "oooooboboo" + "bbbboooooo" + "bbbbbbbbbo" + 
+ "oooboboooo" + "ooooooobbo" + "bbbbbbbbbo" + 
  "oooooooooo" + "oooooooooo" + "oooooooooo";
 
   
@@ -78,9 +78,10 @@ var
   "../sprites/weaponry/fire_particles.png"
 ];
 
+// ---
 
 
-//Create a new Hexi instance, and start it
+// Create a new Hexi instance, and start it
 var 
     g = hexi(1400, 500, setup, thingsToLoad);
 
@@ -95,7 +96,7 @@ var
 
 
 
-// initialize tink lib for keyboard event handling
+// Initialize tink lib for keyboard event handling
 var 
     t = new Tink(PIXI, g.renderer.view);
 
@@ -108,48 +109,7 @@ var
 
 
 
-
-
-function setup() {
-    //ghosts = g.frames("../sprites/ghosts/ghost.png", [[0, 0],[32, 0]], 32, 48);
-
-    terrain = initTerrain();
-    obj = addObjects(terrain);
-    hero = initHero();
-    terrain.addChild(hero);
-
-    butterfly = initButterfly();
-    terrain.addChild(butterfly);
-    /*
-    var r = g.randomInt(10, 100);
-    var waypoints = 
-       [
-         [100 + r, 100 - r],
-         [500 + r, -10],
-         [1200 - 2 * r, 200 - 3 * r],
-         [1300 - 3 * r, 505 + 2 * r],
-         [500 - r, 90 + r],
-         [240 - r, 300 + r],
-         [150 + 4 * r, 420 - r],
-         [100 + r, 100 - r]
-       ];
- 
-       g.walkPath(
-             butterfly,       //The sprite
-             waypoints,       //The array of waypoints
-             1000,             //Total duration, in frames
-             "smoothstep",    //Easing type
-             true,            //Should the path loop?
-             false,            //Should the path reverse?
-             200            //Delay in milliseconds between segments
-        ); */
-
-    camera = g.worldCamera(terrain, g.renderer.view.width, g.renderer.view.width.height, g.renderer.view);
-
-    addExplosion();
-
-    g.state = play;
-}
+// Init the Grid
 
 var 
     borGrid = [];
@@ -167,3 +127,4 @@ function clearGrid(grid)
     }
 }
 
+// ---

@@ -84,7 +84,7 @@ function initTerrain() {
     mark.x = 300;
     mark.y = 300;
     
-    mark.visible = false;
+    //mark.visible = false;
     g.move(mark);
     
     return terrain;
@@ -176,14 +176,15 @@ function initAnimDust()
     var anim = g.sprite(allDust);
     
     terrain.addChild(anim);
-    anim.x = 230;
-    anim.y = 230;
+    anim.x = mark.x;
+    anim.y = mark.y;
     anim.fps = 10;
 
-    anim.width = 200;
-    anim.height = 200;
+    anim.width = boxW;
+    anim.height = boxH;
 
     anim.playAnimation();
+    anim.loop = false;
     
     //anim.visible = false;
     
@@ -266,13 +267,12 @@ function initHero()
 function addExplosion()
 {
     var f = g.filmstrip("../sprites/weaponry/fire_particles.png", 100, 100);
-    var frames = [f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8], f[9], f[21], f[32]];
+    var frames = [f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8], f[9], f[11], f[32]];
 
     expContainer = new PIXI.ParticleContainer(
       15000,
       {alpha: true, scale: true, rotation: true, uvs: true}
     );
-    var ashes = [];
 
     terrain.addChild(expContainer);
 
@@ -282,13 +282,13 @@ function addExplosion()
       { 
               g.createParticles(                 //The function
                   200,                       //x position
-                  400,    //y position
+                  250,    //y position
                   () => g.sprite(frames),        //Particle sprite
                   expContainer,                           //The container to add the particles to               
                   100,                                 //Number of particles
                   0.005,                                 //Gravity
                   true,                              //Random spacing
-                  3.3, 6.2,                          //Min/max angle
+                  0, 6.28,                          //Min/max angle
                   1, 3,                            //Min/max size
                   0.5, 1,                              //Min/max speed
                   0, 1,                       //Min/max scale speed

@@ -13,7 +13,7 @@ function play() {
     if (frameN % clearOnceEvery == 0)
         clearGrid(borGrid);
      
-    camera.centerOver(hero);
+    
     
     if (frameN % skipEvery == 0)
         borders.forEach(b => 
@@ -55,41 +55,45 @@ function play() {
        (side, box) => 
        {
            //alert(side);
-           var initV = 2;
+           var initV = 3;
 
            if (right.isDown && side == "leftMiddle") 
            {
                box.vx = initV;
-               box.ax = 0.9;
+               box.ax = 0.5;
                box.ax_dir = -1;
            }
 
            if (left.isDown && side == "rightMiddle") 
            {
                box.vx = -initV;
-               box.ax = 0.9;
+               box.ax = 0.5;
                box.ax_dir = 1;
            }
 
            if (down.isDown && side == "topMiddle") 
            {
                box.vy = initV;
-               box.ay = 0.9;
+               box.ay = 0.5;
                box.ay_dir = -1;
            }
 
            if (up.isDown && side == "bottomMiddle") 
            {
                box.vy = -initV;
-               box.ay = 0.9;
+               box.ay = 0.5;
                box.ay_dir = 1;
            }
                
        });
     // ---
 
+
+   // camera.centerOver(hero);
+
+
     // check if box is bumping into border
-    
+   
     
 
     boxes.forEach(b => 
