@@ -228,18 +228,19 @@ function initHero()
    hero.checkDir = function () {
        var dir = this.dir;
 
-       if (Math.abs(this.vx) >= Math.abs(this.vy)) {
+      
+       
            if (this.x > this.prevX)
                dir = "right";
            else if (this.x < this.prevX)
                dir = "left";
-       }
-       else {
+       
+       
            if (this.y > this.prevY)
                dir = "down";
            else if (this.y < this.prevY)
                dir = "up";
-       }
+       
 
        if (dir != this.dir) {
            this.dir = dir;
