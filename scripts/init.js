@@ -1,3 +1,4 @@
+
 var 
     rowCnt = 10;
     colCnt = 30;
@@ -38,7 +39,7 @@ var
  "wfffffffff" + "ffgggffffc" + "fffffffffw" +
  "wfffffffff" + "ffggggfgfc" + "fffffffffw" +
  "wfggggggff" + "ffgffffgfc" + "fffffffffw" +
- "wfggggggff" + "ffggggggfc" + "fffffffffw" +
+ "wfggggggff" + "ffgggggggg" + "fffffffffw" +
  "wwwwwwwwww" + "wwwwwwwwww" + "wwwwwwwwww";
 
 
@@ -48,13 +49,13 @@ var
  "oooooooooo" + "oooooooooo" + "oooooooooo" + 
  "oooooooooo" + "oobboooobo" + "oooooooooo" + 
  "ooobbboooo" + "oooooooooo" + "oooooooooo" + 
- "oooboooboo" + "oobbobbbbo" + "oobbbbbboo" + 
+ "oooboooboo" + "oobbobbbbo" + "oooooooooo" + 
  "oooooooooo" + "oooboboooo" + "oobbbbbbbo" + 
  
  "oobboooobo" + "oooboboooo" + "oooooooooo" + 
- "oooooboboo" + "oooboooooo" + "obbbbbbbbo" + 
- "oooooboboo" + "bbbboooooo" + "bbbbbbbbbo" + 
- "oooboboooo" + "ooooooobbo" + "bbbbbbbbbo" + 
+ "oooooboboo" + "oooboooooo" + "oooooooooo" + 
+ "oooooboboo" + "bbbboooooo" + "oooooooooo" + 
+ "oooboboooo" + "oooooooobo" + "oooooooooo" + 
  "oooooooooo" + "oooooooooo" + "oooooooooo";
 
   
@@ -106,6 +107,10 @@ var
     right = t.keyboard(39),
     down = t.keyboard(40);
 // ---
+
+
+
+//pointer = t.makePointer();
 
 
 

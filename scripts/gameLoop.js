@@ -1,14 +1,18 @@
 var 
     frameN = 0,
     skipEvery = 1;
-    clearOnceEvery = 1000;
+    clearOnceEvery = 10;
 
     var gu = new GameUtilities();
 
 function play() {
     frameN++;
+    //pointer.press = () => alert("The pointer was pressed");
 
-    gu.followEase(butterfly, hero, 0.003);
+    //g.arrowControl(hero, 10);
+    
+
+    gu.followEase(butterfly, hero, 0.009);
 
     if (frameN % clearOnceEvery == 0)
         clearGrid(borGrid);
@@ -18,6 +22,7 @@ function play() {
     if (frameN % skipEvery == 0)
         borders.forEach(b => 
     {
+        
         var j = Math.floor(b.x / boxW);
         var i = Math.floor(b.y / boxH);
 
@@ -143,16 +148,51 @@ function play() {
        })
     // ---
     
-    g.arrowControl(hero, 10);
-    g.move(hero);
-
-    hero.checkDir();
+    
+    //g.move(hero);
+    listen_kbd(hero);
 
     //terrain.x -= 1;
     //g.move(terrain);
     
-    hero.prevX = hero.x;
-    hero.prevY = hero.y;
+    
 
     
+}
+
+
+function listen_kbd(hero)
+{
+    hero.prevX = hero.x;
+    hero.prevY = hero.y;
+    if (left.isDown)
+    {
+        //hero.vx = -10;
+        hero.x += -10;
+        //hero.vy = 0;
+    }
+       
+    if (right.isDown)
+    {
+        //hero.vx = 10;
+        hero.x += 10;
+        //hero.vy = 0;
+    }
+       
+    if (up.isDown)
+    {
+        //hero.vy = -10;
+        hero.y += -10;
+        //hero.vx = 0;
+    }
+       
+    if (down.isDown)
+    {
+        //hero.vy = 10; 
+        hero.y += 10;
+        //hero.vx = 0;
+    }
+
+    hero.checkDir();
+       
 }

@@ -203,7 +203,7 @@ function initButterfly()
    hero.x = boxW * 30;
    hero.y = boxH * 3;
 
-   hero.fps = 25;
+   hero.fps = 15;
 
    //hero.dir = "down";
    hero.playAnimation();
@@ -228,7 +228,7 @@ function initHero()
    hero.checkDir = function () {
        var dir = this.dir;
 
-       if (Math.abs(this.vx) > Math.abs(this.vy)) {
+       if (Math.abs(this.vx) >= Math.abs(this.vy)) {
            if (this.x > this.prevX)
                dir = "right";
            else if (this.x < this.prevX)
@@ -281,18 +281,18 @@ function addExplosion()
       () => 
       { 
               g.createParticles(                 //The function
-                  200,                       //x position
-                  250,    //y position
+                  330,                       //x position
+                  420,    //y position
                   () => g.sprite(frames),        //Particle sprite
                   expContainer,                           //The container to add the particles to               
                   100,                                 //Number of particles
                   0.005,                                 //Gravity
                   true,                              //Random spacing
                   0, 6.28,                          //Min/max angle
-                  1, 3,                            //Min/max size
+                  2, 3,                            //Min/max size
                   0.5, 1,                              //Min/max speed
                   0, 1,                       //Min/max scale speed
-                  0.01, 0.08,                       //Min/max alpha speed
+                  0.001, 0.1,                       //Min/max alpha speed
                   0.1, 0.5                          //Min/max rotation speed
        ); 
       }
