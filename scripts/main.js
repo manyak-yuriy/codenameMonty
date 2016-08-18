@@ -166,7 +166,7 @@ function addParticles()
     )); 
 
     particles.forEach(p => {p.fps = 3;});
-    //g.wait(5000, ()=>{particles.forEach(p => {g.remove(p); p = undefined;})});
+    g.wait(5000, ()=>{g.remove(particles)});
 }
 
 function initAnimDust()
@@ -228,8 +228,6 @@ function initHero()
    hero.checkDir = function () {
        var dir = this.dir;
 
-      
-       
            if (this.x > this.prevX)
                dir = "right";
            else if (this.x < this.prevX)
@@ -303,4 +301,41 @@ function addExplosion()
 
     particles.forEach(p => {p.fps = 3;});
     //g.wait(5000, ()=>{particles.forEach(p => {g.remove(p); p = undefined;})});
+}
+
+
+function listen_kbd(hero)
+{
+    hero.prevX = hero.x;
+    hero.prevY = hero.y;
+    if (left.isDown)
+    {
+        //hero.vx = -10;
+        hero.x += -10;
+        //hero.vy = 0;
+    }
+       
+    if (right.isDown)
+    {
+        //hero.vx = 10;
+        hero.x += 10;
+        //hero.vy = 0;
+    }
+       
+    if (up.isDown)
+    {
+        //hero.vy = -10;
+        hero.y += -10;
+        //hero.vx = 0;
+    }
+       
+    if (down.isDown)
+    {
+        //hero.vy = 10; 
+        hero.y += 10;
+        //hero.vx = 0;
+    }
+
+    hero.checkDir();
+       
 }

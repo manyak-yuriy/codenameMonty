@@ -106,8 +106,25 @@ var
     up = t.keyboard(38),
     right = t.keyboard(39),
     down = t.keyboard(40);
+
+    space = t.keyboard(32);
 // ---
 
+    var paused = false;
+
+    space.press =
+    function () {
+        if (!paused) {
+            g.pause();
+            paused = true;
+        }
+        else
+        {
+            g.resume();
+            paused = false;
+        }
+
+    }
 
 
 //pointer = t.makePointer();

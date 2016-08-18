@@ -145,54 +145,9 @@ function play() {
            addParticles(); 
            var anim = initAnimDust(); 
            mark.visible = false;
+           //g.centerUpon(hero);
        })
     // ---
-    
-    
-    //g.move(hero);
+
     listen_kbd(hero);
-
-    //terrain.x -= 1;
-    //g.move(terrain);
-    
-    
-
-    
-}
-
-
-function listen_kbd(hero)
-{
-    hero.prevX = hero.x;
-    hero.prevY = hero.y;
-    if (left.isDown)
-    {
-        //hero.vx = -10;
-        hero.x += -10;
-        //hero.vy = 0;
-    }
-       
-    if (right.isDown)
-    {
-        //hero.vx = 10;
-        hero.x += 10;
-        //hero.vy = 0;
-    }
-       
-    if (up.isDown)
-    {
-        //hero.vy = -10;
-        hero.y += -10;
-        //hero.vx = 0;
-    }
-       
-    if (down.isDown)
-    {
-        //hero.vy = 10; 
-        hero.y += 10;
-        //hero.vx = 0;
-    }
-
-    hero.checkDir();
-       
 }
