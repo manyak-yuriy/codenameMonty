@@ -25,6 +25,10 @@ var
     boxes = [];
 
 
+var 
+    enemies = [];
+
+
 
 
     // w - wall     g - grass     s - stone    f - floor      c - concrete wall
@@ -88,7 +92,8 @@ var
   "../sprites/col-bubble.png",
   "../sprites/bubble-death.png",
   "../sprites/heroes/butterfly.png",
-  "../sprites/weaponry/fire_particles.png"
+  "../sprites/weaponry/fire_particles.png",
+  "../sprites/heroes/lizard.png"
 ];
 
 // ---
@@ -162,3 +167,8 @@ function clearGrid(grid)
 }
 
 // ---
+
+
+blurFilter = new PIXI.filters.BlurFilter();
+blurFilter.blur  = 1;
+blurFilter.passes  = 10;

@@ -20,6 +20,8 @@ function initTerrain() {
                    {
                        box = g.sprite("../sprites/walls/stone1.jpg");
                        box.role = "border";
+                       
+                       
                        //box = g.sprite("../sprites/walls/red_brick.jpg");
                        borders.push(box);
                        break;
@@ -73,33 +75,23 @@ function initTerrain() {
            //box.ax_dir = 0;
 
            
-           /*
-           var blurFilter = new PIXI.filters.BlurFilter();
-           blurFilter.blur  = 5000;
-           blurFilter.passes  = 500;
-           */
-           shock = new PIXI.filters.ShockwaveFilter();
            
-           
-           box.filters = [shock];
-           shock.center = {x: 0.5, y: 0.5};
            terrain.addChild(box);
        }
 
     mark = g.sprite("../sprites/walls/red_brick.jpg");
     terrain.addChild(mark);
-
+    
     mark.width = boxW;
     mark.height = boxH;
 
     mark.x = 300;
     mark.y = 300;
     
-    //mark.visible = false;
-    g.move(mark);
-    
     return terrain;
 }
+
+
 
 function addObjects(terrain)
 {
@@ -117,9 +109,9 @@ function addObjects(terrain)
                         //box.circular = true;
 
                         box.role = "border";
-
+                        
                         box.width = boxW;
-                        box.height = boxH;
+                        box.height = boxH; 
    
                         box.x = boxW * j;
                         box.y = boxH * i;
@@ -137,6 +129,8 @@ function addObjects(terrain)
                         //box.rotation += (Math.PI) * g.randomInt(0, 10);
 
                         terrain.addChild(box);
+
+                        
 
                         break;
                     }
@@ -181,6 +175,8 @@ function addParticles()
     
 }
 
+
+
 function initAnimDust()
 {
     var allDust = g.filmstrip("../sprites/bubble.png", 192, 192);
@@ -203,6 +199,8 @@ function initAnimDust()
     return anim;
 }
 
+
+
 function initButterfly()
 {
    var frames = g.filmstrip("../sprites/heroes/butterfly.png", 70, 65);
@@ -223,10 +221,13 @@ function initButterfly()
    return hero;
 }
 
+
+
 function initHero()
 {
    var ghosts = g.filmstrip("../sprites/heroes/ghost.png", 32, 48);
    var hero = g.sprite(ghosts);
+
    hero.circular = true;
 
    hero.dirFrames = 
@@ -276,10 +277,78 @@ function initHero()
 
    hero.fps = 15;
 
+   terrain.addChild(hero);
+
+
    hero.dir = "stay";
    hero.playAnimation(hero.dirFrames[hero.dir]);
 
    return hero;
+}
+
+
+function initEnemy(i, j)
+{
+   var frames = g.filmstrip("../sprites/heroes/lizard.png", 80, 56);
+   var enemy = g.sprite(frames);
+
+   enemy.circular = true;
+
+   enemy.dirFrames = 
+   {
+        "down": [24, 29],
+        "left": [12, 17],
+        "right": [0, 5],
+        "up": [36, 41]
+   }
+
+   enemy.checkDir = function () {
+       var dir = this.dir;
+
+           if (this.x > this.prevX)
+               dir = "right";
+           else if (this.x < this.prevX)
+               dir = "left";
+       
+       
+           if (this.y > this.prevY)
+               dir = "down";
+           else if (this.y < this.prevY)
+               dir = "up";
+
+           if (this.x == this.prevX && this.y == this.prevY)
+               dir = "stay";
+       
+       if (dir == "stay")
+       {
+           this.stopAnimation();
+           
+       }
+       else
+       if (dir != this.dir) {
+           this.dir = dir;
+           this.stopAnimation();
+           this.playAnimation(this.dirFrames[enemy.dir]);
+       }
+   } 
+   
+   enemy.width = boxW - 5;
+   enemy.height = boxH - 5;
+
+   enemy.x = boxW * j;
+   enemy.y = boxH * i;
+
+   enemy.vx = boxW / 10;
+
+   enemy.fps = 10;
+
+   terrain.addChild(enemy);
+
+
+   enemy.dir = "stay";
+   enemy.playAnimation(enemy.dirFrames[enemy.dir]);
+
+   return enemy;
 }
 
 
@@ -323,6 +392,9 @@ function addExplosion(x, y)
     particles.forEach(p => {p.fps = 3;});
     //g.wait(5000, ()=>{particles.forEach(p => {g.remove(p); p = undefined;})});
 }
+
+
+
 
 
 function listen_kbd(hero)

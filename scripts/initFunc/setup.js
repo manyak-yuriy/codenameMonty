@@ -1,11 +1,17 @@
 
+
+
 function setup() {
     //ghosts = g.frames("../sprites/ghosts/ghost.png", [[0, 0],[32, 0]], 32, 48);
 
     terrain = initTerrain();
     obj = addObjects(terrain);
+    
+    //g.stage.interactive = true;
     hero = initHero();
-    terrain.addChild(hero);
+
+    for (i = 0; i < 30; i++)
+    enemies.push(initEnemy(8, 25));
 
     butterfly = initButterfly();
     terrain.addChild(butterfly);

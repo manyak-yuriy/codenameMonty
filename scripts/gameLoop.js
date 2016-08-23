@@ -18,9 +18,7 @@ var
 function play() {
     frameN++;
     camera.follow(hero);
-
-    shock.time = (shock.time >= 1 ) ? 0 : shock.time + 0.01;
-    
+    //blurFilter.blur  =  Math.sin(frameN / 100);
 
     gu.followEase(butterfly, hero, 0.03);
 
@@ -104,9 +102,6 @@ function play() {
     // ---
 
 
-   
-
-
     // check if box is bumping into border
    
     
@@ -159,6 +154,53 @@ function play() {
     // check if hero is not bumping upon border
     g.hit(hero, borders, true, false, false);
 
+    // check if enemy is not bumping upon border
+    enemies.forEach(enemy => 
+    {
+        var arrAdj = getBordGridCell(enemy);
+
+        //console.log("v="+b.vx + " a="+b.ax);
+        if (arrAdj.length > 0)
+        arrAdj.forEach(bor => 
+        {
+           
+               g.hit(enemy, bor, true, false, true, () => 
+               {
+                     var r = g.randomInt(1, 4);
+                     switch (r)
+                     {
+                         case 1:
+                         {
+                             enemy.vx = boxW / 25;
+                             enemy.vy = 0;
+                             break;
+                         }
+                         case 2:
+                         {
+                             enemy.vx = -boxW / 25;
+                             enemy.vy = 0;
+                             break;
+                         }
+                         case 3:
+                         {
+                             enemy.vx = 0;
+                             enemy.vy = boxH / 25;
+                             break;
+                         }
+                         case 4:
+                         {
+                             enemy.vx = 0;
+                             enemy.vy = -boxH / 25;
+                             break;
+                         }
+                     }
+               });
+        });
+        
+    });
+    
+    
+
     g.hit(butterfly, borders, true, false, false);
 
     // check if hero is stumbling upon the mark
@@ -167,10 +209,18 @@ function play() {
        {
            addParticles(); 
            var anim = initAnimDust(); 
-           mark.visible = false;
-           //g.centerUpon(hero);
        })
     // ---
 
     listen_kbd(hero);
+
+    enemies.forEach(enemy => 
+    {
+        g.move(enemy);
+        enemy.checkDir();
+
+        enemy.prevX = enemy.x;
+        enemy.prevY = enemy.y;
+    });
+    
 }
