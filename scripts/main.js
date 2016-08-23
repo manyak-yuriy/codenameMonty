@@ -198,10 +198,10 @@ function initButterfly()
    var hero = g.sprite(frames);
    hero.circular = true;
 
-   hero.width = boxW * 1.3;
-   hero.height = boxH * 1.3;
+   hero.width = boxW * 0.9;
+   hero.height = boxH * 0.9;
 
-   hero.x = boxW * 30;
+   hero.x = boxW * 20;
    hero.y = boxH * 3;
 
    hero.fps = 15;

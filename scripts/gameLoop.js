@@ -13,7 +13,7 @@ function play() {
     //g.arrowControl(hero, 10);
     
 
-    gu.followEase(butterfly, hero, 0.009);
+    gu.followEase(butterfly, hero, 0.03);
 
     if (frameN % clearOnceEvery == 0)
         clearGrid(borGrid);
@@ -138,6 +138,8 @@ function play() {
 
     // check if hero is not bumping upon border
     g.hit(hero, borders, true, false, false);
+
+    g.hit(butterfly, borders, true, false, false);
 
     // check if hero is stumbling upon the mark
     g.hit(hero, mark, true, true, false, 
