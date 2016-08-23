@@ -84,11 +84,11 @@ var
 
 // Create a new Hexi instance, and start it
 var 
-    g = hexi(1400, 500, setup, thingsToLoad);
+    g = hexi(1200, 500, setup, thingsToLoad);
 
 //Set the background color and scale the canvas
     g.backgroundColor = "black";
-    g.scaleToWindow();
+    //g.scaleToWindow();
     g.fps = 25;
 
 //Start Hexi

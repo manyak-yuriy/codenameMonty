@@ -33,9 +33,13 @@ function setup() {
              200            //Delay in milliseconds between segments
         ); */
 
-    camera = g.worldCamera(terrain, g.renderer.view.width, g.renderer.view.width.height, g.renderer.view);
+    //camera = gu.worldCamera(terrain, g.renderer.view.width, g.renderer.view.width.height, g.renderer.view);
+    camera = gu.worldCamera(terrain, terrain.width, terrain.height, g.renderer.view);
     
-    addExplosion();
+    addExplosion(boxW * 10, boxH * 5);
+    addExplosion(boxW * 10, boxH * 6);
+    addExplosion(boxW * 11, boxH * 5);
+    addExplosion(boxW * 11, boxH * 6);
 
     g.state = play;
 }

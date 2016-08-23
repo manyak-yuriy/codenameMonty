@@ -7,6 +7,7 @@ var
 
 function play() {
     frameN++;
+    camera.follow(hero);
     //pointer.press = () => alert("The pointer was pressed");
 
     //g.arrowControl(hero, 10);
@@ -94,7 +95,7 @@ function play() {
     // ---
 
 
-   // camera.centerOver(hero);
+   
 
 
     // check if box is bumping into border

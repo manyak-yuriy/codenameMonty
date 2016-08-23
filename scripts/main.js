@@ -166,7 +166,8 @@ function addParticles()
     )); 
 
     particles.forEach(p => {p.fps = 3;});
-    g.wait(5000, ()=>{g.remove(particles)});
+    particles.forEach(p => {g.wait(2000, ()=>{p.parent = g.stage; g.remove(p); });});
+    
 }
 
 function initAnimDust()
@@ -263,10 +264,10 @@ function initHero()
 
 
 
-function addExplosion()
+function addExplosion(x, y)
 {
     var f = g.filmstrip("../sprites/weaponry/fire_particles.png", 100, 100);
-    var frames = [f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8], f[9], f[11], f[32]];
+    var frames = [f[1], f[2], f[3], f[4], f[5], f[6], f[15], f[32]];
 
     expContainer = new PIXI.ParticleContainer(
       15000,
@@ -276,22 +277,22 @@ function addExplosion()
     terrain.addChild(expContainer);
 
     fire = g.particleEmitter(
-      100,                                   //The interval
+      250,                                   //The interval
       () => 
       { 
               g.createParticles(                 //The function
-                  330,                       //x position
-                  420,    //y position
+                  x,                       //x position
+                  y,    //y position
                   () => g.sprite(frames),        //Particle sprite
                   expContainer,                           //The container to add the particles to               
                   100,                                 //Number of particles
-                  0.005,                                 //Gravity
+                  0,                                 //Gravity
                   true,                              //Random spacing
                   0, 6.28,                          //Min/max angle
                   2, 3,                            //Min/max size
-                  0.5, 1,                              //Min/max speed
+                  0.1, 1.8,                              //Min/max speed
                   0, 1,                       //Min/max scale speed
-                  0.001, 0.1,                       //Min/max alpha speed
+                  0.01, 0.3,                       //Min/max alpha speed
                   0.1, 0.5                          //Min/max rotation speed
        ); 
       }
