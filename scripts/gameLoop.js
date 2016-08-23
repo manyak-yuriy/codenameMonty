@@ -5,12 +5,21 @@ var
 
     var gu = new GameUtilities();
 
+
+    function getBordGridCell(item)
+    {
+        var j = Math.floor(item.x / boxW);
+        var i = Math.floor(item.y / boxH);
+        var arrAdj = borGrid[i][j];
+        return arrAdj;
+    }
+
+
 function play() {
     frameN++;
     camera.follow(hero);
-    //pointer.press = () => alert("The pointer was pressed");
 
-    //g.arrowControl(hero, 10);
+    shock.time = (shock.time >= 1 ) ? 0 : shock.time + 0.01;
     
 
     gu.followEase(butterfly, hero, 0.03);
@@ -122,18 +131,29 @@ function play() {
         }
            
 
-        var box_j = Math.floor(b.x / boxW);
-        var box_i = Math.floor(b.y / boxH);
-        var arrAdj = borGrid[box_i][box_j]
+        var arrAdj = getBordGridCell(b);
 
         //console.log("v="+b.vx + " a="+b.ax);
         if (arrAdj.length > 0)
-        arrAdj.forEach(bb => 
+        arrAdj.forEach(bor => 
         {
-            if (b != bb)
-               g.hit(b, bb, true, false, true, () => {})
+            if (b != bor)
+               g.hit(b, bor, true, false, true, () => {})
         });
     }); 
+
+    
+    particles.forEach(p => 
+    {
+        var arrAdj = getBordGridCell(p);
+
+        //console.log("v="+b.vx + " a="+b.ax);
+        if (arrAdj.length > 0)
+        arrAdj.forEach(bor => 
+        {
+               g.hit(p, bor, true, true, false, () => {})
+        });
+    });
     // ---
 
     // check if hero is not bumping upon border

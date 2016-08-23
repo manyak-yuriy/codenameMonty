@@ -1,9 +1,9 @@
 
 var 
-    rowCnt = 10;
+    rowCnt = 15;
     colCnt = 30;
-    boxH = 50;
-    boxW = 50;
+    boxH = 70;
+    boxW = 70;
 
 
 
@@ -40,6 +40,12 @@ var
  "wfffffffff" + "ffggggfgfc" + "fffffffffw" +
  "wfggggggff" + "ffgffffgfc" + "fffffffffw" +
  "wfggggggff" + "ffgggggggg" + "fffffffffw" +
+ "wcccccgccc" + "cccccccccc" + "ccccccfccw" +
+
+ "wffffgggff" + "ffgggggggc" + "fffffffffw" +
+ "wfffffgfff" + "ffgggggggc" + "fffffffffw" +
+ "wfggggggff" + "ffgggggggc" + "fffffffffw" +
+ "wfggggggff" + "ffgggggggg" + "fffffffffw" +
  "wwwwwwwwww" + "wwwwwwwwww" + "wwwwwwwwww";
 
 
@@ -52,6 +58,12 @@ var
  "oooboooboo" + "oobbobbbbo" + "oooooooooo" + 
  "oooooooooo" + "oooboboooo" + "oobbbbbbbo" + 
  
+ "oobboooobo" + "oooboboooo" + "oooooooooo" + 
+ "oooooboboo" + "oooboooooo" + "oooooooooo" + 
+ "oooooboboo" + "bbbboooooo" + "oooooooooo" + 
+ "oooboboooo" + "oooooooobo" + "oooooooooo" + 
+ "oooooooooo" + "oooooooooo" + "oooooooooo" +
+
  "oobboooobo" + "oooboboooo" + "oooooooooo" + 
  "oooooboboo" + "oooboooooo" + "oooooooooo" + 
  "oooooboboo" + "bbbboooooo" + "oooooooooo" + 
@@ -84,7 +96,7 @@ var
 
 // Create a new Hexi instance, and start it
 var 
-    g = hexi(1200, 500, setup, thingsToLoad);
+    g = hexi(window.innerWidth, window.innerHeight, setup, thingsToLoad);
 
 //Set the background color and scale the canvas
     g.backgroundColor = "black";

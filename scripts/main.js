@@ -72,6 +72,17 @@ function initTerrain() {
 
            //box.ax_dir = 0;
 
+           
+           /*
+           var blurFilter = new PIXI.filters.BlurFilter();
+           blurFilter.blur  = 5000;
+           blurFilter.passes  = 500;
+           */
+           shock = new PIXI.filters.ShockwaveFilter();
+           
+           
+           box.filters = [shock];
+           shock.center = {x: 0.5, y: 0.5};
            terrain.addChild(box);
        }
 
@@ -224,6 +235,7 @@ function initHero()
         "left": [3, 5],
         "right": [6, 8],
         "up": [9, 11]
+        
    }
 
    hero.checkDir = function () {
@@ -239,7 +251,15 @@ function initHero()
                dir = "down";
            else if (this.y < this.prevY)
                dir = "up";
+
+           if (this.x == this.prevX && this.y == this.prevY)
+               dir = "stay";
        
+       if (dir == "stay")
+       {
+           this.stopAnimation();
+       }
+       else
 
        if (dir != this.dir) {
            this.dir = dir;
@@ -256,7 +276,7 @@ function initHero()
 
    hero.fps = 15;
 
-   hero.dir = "down";
+   hero.dir = "stay";
    hero.playAnimation(hero.dirFrames[hero.dir]);
 
    return hero;
