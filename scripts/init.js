@@ -57,7 +57,7 @@ var
 var 
     map_obj =
  "oooooooooo" + "oooooooooo" + "oooooooooo" + 
- "oooooooooo" + "oobboooobo" + "oooooooooo" + 
+ "oooooooooo" + "oobboooobo" + "oooooooobo" + 
  "ooobbboooo" + "oooooooooo" + "oooooooooo" + 
  "oooboooboo" + "oobbobbbbo" + "oooooooooo" + 
  "oooooooooo" + "oooboboooo" + "oobbbbbbbo" + 
